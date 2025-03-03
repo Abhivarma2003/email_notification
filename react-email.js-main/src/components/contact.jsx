@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import styled from "styled-components";
-import { motion } from "framer-motion";
 
 const Contact = () => {
   const form = useRef();
@@ -32,13 +31,10 @@ const Contact = () => {
 
   return (
     <StyledContactForm>
-      <motion.div
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="contact-container"
-      >
-        <h2>📩 Get In <span>Touch</span></h2>
+      <div className="contact-container">
+        <h2>
+          📩 Get In <span>Touch</span>
+        </h2>
         <label>
           <input type="checkbox" onChange={() => setIsBulk(!isBulk)} /> Send to multiple recipients
         </label>
@@ -49,10 +45,10 @@ const Contact = () => {
           <input type="text" name="user_email" placeholder={isBulk ? "email1@example.com, email2@example.com" : "Your Email"} required />
           <label>Message</label>
           <textarea name="message" placeholder="Your Message" required />
-          <motion.input whileHover={{ scale: 1.1 }} type="submit" value="Send" />
+          <input type="submit" value="Send" className="submit-btn" />
         </form>
         {success && <SuccessMessage>🎉 Message sent successfully!</SuccessMessage>}
-      </motion.div>
+      </div>
     </StyledContactForm>
   );
 };
@@ -65,6 +61,7 @@ const StyledContactForm = styled.div`
   align-items: center;
   height: 100vh;
   background: linear-gradient(to right, #c9d6ff, #e2e2e2);
+  
   .contact-container {
     background: white;
     padding: 30px;
@@ -72,36 +69,67 @@ const StyledContactForm = styled.div`
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 400px;
     text-align: center;
+    opacity: 0;
+    transform: translateY(-50px);
+    animation: fadeIn 0.5s forwards ease-out;
   }
+
   h2 {
     color: #333;
   }
+
   h2 span {
     color: #ff4b2b;
   }
+
   form {
     display: flex;
     flex-direction: column;
   }
+
   input, textarea {
     margin-top: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    transition: border-color 0.3s ease;
   }
-  input[type="submit"] {
+
+  input:focus, textarea:focus {
+    border-color: #ff4b2b;
+    outline: none;
+  }
+
+  .submit-btn {
     background: #ff4b2b;
     color: white;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s ease, transform 0.2s ease;
   }
-  input[type="submit"]:hover {
+
+  .submit-btn:hover {
     background: #ff3a1a;
+    transform: scale(1.1);
+  }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 `;
 
-const SuccessMessage = styled(motion.div)`
+const SuccessMessage = styled.div`
   margin-top: 10px;
   color: green;
   font-weight: bold;
+  opacity: 0;
+  animation: fadeInSuccess 0.5s forwards;
+
+  @keyframes fadeInSuccess {
+    to {
+      opacity: 1;
+    }
+  }
 `;
